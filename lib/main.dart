@@ -1,9 +1,12 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, unnecessary_overrides
-
-import 'package:bb_project/pages/cadastro.dart';
-import 'package:bb_project/pages/estoque.dart';
-import 'package:bb_project/pages/home_page.dart';
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, unnecessary_overrides, unused_import
+import 'package:bb_project/modules/estoque/bloc/estoque_bloc.dart';
+import 'package:bb_project/modules/estoque/estoque_home_page.dart';
+import 'package:bb_project/modules/usu%C3%A1rios/usuario_home_page.dart';
+import 'package:bb_project/modules/vendas/vendas_home_page.dart';
+import 'package:bb_project/widgets/bottom_navigator_bar.dart';
+import 'package:bb_project/widgets/formulario_de_estoque.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
@@ -23,18 +26,31 @@ class ManagementRouter extends Module {
   void routes(RouteManager r) {
     r.child(
       "/",
-      child: (_) => const HomePage(),
+      child: ((contextVendas) => const VendasPage()),
       transition: TransitionType.noTransition,
     );
+
     r.child(
-      "/storage",
-      child: (storage) => const Storage(),
+      "/estoque",
+      child: (contextEstoque) => BlocProvider<EstoqueBloc>(
+        create: (_) => EstoqueBloc(),
+        child: const EstoquePage(),
+      ),
       transition: TransitionType.noTransition,
     );
+
     r.child(
-      "/cadastro",
-      child: (_) => const Cadastro(),
+      "/usuario",
+      child: (contextUsuario) => const UsuarioPage(),
       transition: TransitionType.noTransition,
+    );
+
+    r.child(
+      "/estoqueformulario",
+      child: (_) => BlocProvider(
+        create: (_) => EstoqueBloc(),
+        child: const CustomCardForm(),
+      ),
     );
     super.routes(r);
   }

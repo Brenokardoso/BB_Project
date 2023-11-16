@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  final int selectIndex;
+  CustomBottomNavigationBar({Key? key, required this.selectIndex})
+      : super(key: key);
 
   @override
   State<CustomBottomNavigationBar> createState() =>
@@ -10,24 +12,32 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  var _selectedIndex = 0;
+  var _selectIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectIndex = widget.selectIndex;
+  }
 
   void _onTapItem(int index) {
     setState(() {
-      _selectedIndex = index;
+      _selectIndex = index;
     });
 
-    switch (index) {
-      case 0:
-        Modular.to.navigate("/");
-        return;
-      case 1:
-        Modular.to.navigate("/storage");
-        return;
-      case 2:
-        Modular.to.navigate("/cadastro");
-        return;
-    }
+    Future(() {
+      switch (index) {
+        case 0:
+          Modular.to.navigate("/");
+          return;
+        case 1:
+          Modular.to.navigate("/estoque");
+          return;
+        case 2:
+          Modular.to.navigate("/usuario");
+          return;
+      }
+    });
   }
 
   @override
@@ -36,18 +46,30 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: "Início",
+          label: "Vendas",
+          activeIcon: Icon(
+            Icons.home,
+            color: Colors.yellow,
+          ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.storage),
           label: "Estoque",
+          activeIcon: Icon(
+            Icons.storage,
+            color: Colors.yellow,
+          ),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.lock_rounded),
-          label: "Cadastro de Itens",
+          icon: Icon(Icons.person),
+          activeIcon: Icon(
+            Icons.person,
+            color: Colors.yellow,
+          ),
+          label: "Usuário",
         )
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: _selectIndex,
       onTap: _onTapItem,
     );
   }
